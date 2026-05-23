@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { initVibeApp, AppLifecycle } from '@gui/vibe-container';
 import { useFileSystem, reportLifecycle, createAppFileApi, fetchVibeInfo } from '@/lib';
+import { useTranslation } from 'react-i18next';
+import './i18n';
 import {
   Folder,
   FileText,
@@ -97,6 +99,8 @@ const TYPE_ICONS: Record<EvidenceType, React.ReactNode> = {
   relation: <Users size={18} />,
 };
 
+// NOTE: TYPE_NAMES, CATEGORY_INFO, IMPACT_INFO are mirrored by i18n useMemo versions inside EvidenceVault component
+// They keep original English values as defaults for server-side rendering / initial mount
 const TYPE_NAMES: Record<EvidenceType, string> = {
   video: 'VIDEO ARCHIVE',
   log: 'SYSTEM LOG',
@@ -229,6 +233,7 @@ const EvidenceDetail: React.FC<{
           <div className={styles.detailHeaderLeft}>
             <button className={styles.detailBackBtn} onClick={onClose}>
               <ChevronLeft size={18} />
+              <span style={{ marginLeft: 4 }}>{t('detail.back')}</span>
             </button>
             <div>
               <div className={styles.detailTypeLabel}>{TYPE_NAMES[evidence.type]}</div>
@@ -259,17 +264,17 @@ const EvidenceDetail: React.FC<{
             {/* Metadata Grid */}
             <div className={styles.metaGrid}>
               <div className={styles.metaItem}>
-                <div className={styles.metaLabel}>DATE</div>
+                <div className={styles.metaLabel}>{t('detail.date')}</div>
                 <div className={styles.metaValue}>
                   {new Date(evidence.timestamp).toLocaleDateString()}
                 </div>
               </div>
               <div className={styles.metaItem}>
-                <div className={styles.metaLabel}>SOURCE</div>
+                <div className={styles.metaLabel}>{t('detail.source')}</div>
                 <div className={styles.metaValue}>{evidence.source}</div>
               </div>
               <div className={styles.metaItem}>
-                <div className={styles.metaLabel}>CREDIBILITY</div>
+                <div className={styles.metaLabel}>{t('detail.credibility')}</div>
                 <div
                   className={styles.metaValue}
                   style={{ color: evidence.credibility > 80 ? '#22c55e' : '#FAEA5F' }}
@@ -278,13 +283,13 @@ const EvidenceDetail: React.FC<{
                 </div>
               </div>
               <div className={styles.metaItem}>
-                <div className={styles.metaLabel}>IMPORTANCE</div>
+                <div className={styles.metaLabel}>{t('detail.importance')}</div>
                 <div className={styles.metaValue}>
                   {evidence.importance >= 80
-                    ? 'CRITICAL'
+                    ? t('importance.critical')
                     : evidence.importance >= 50
-                      ? 'HIGH'
-                      : 'NORMAL'}
+                      ? t('importance.high')
+                      : t('importance.normal')}
                 </div>
               </div>
             </div>
@@ -302,13 +307,13 @@ const EvidenceDetail: React.FC<{
 
             {/* Description */}
             <div className={styles.detailSection}>
-              <h4 className={styles.sectionTitle}>DESCRIPTION</h4>
+              <h4 className={styles.sectionTitle}>{t('detail.description')}</h4>
               <p className={styles.sectionText}>{evidence.description}</p>
             </div>
 
             {/* Content */}
             <div className={styles.detailSection}>
-              <h4 className={styles.sectionTitle}>EVIDENCE CONTENT</h4>
+              <h4 className={styles.sectionTitle}>{t('detail.evidenceContent')}</h4>
               <div className={styles.contentBlock}>{evidence.content}</div>
             </div>
 
@@ -318,7 +323,7 @@ const EvidenceDetail: React.FC<{
                 {evidence.vindicateText && (
                   <div className={styles.impactPositive}>
                     <div className={styles.impactLabel}>
-                      <CheckCircle size={16} /> POSITIVE IMPACT
+                      <CheckCircle size={16} /> {t('impact.positiveImpact')}
                     </div>
                     <p className={styles.impactText}>{evidence.vindicateText}</p>
                   </div>
@@ -326,7 +331,7 @@ const EvidenceDetail: React.FC<{
                 {evidence.exposeText && (
                   <div className={styles.impactNegative}>
                     <div className={styles.impactLabel}>
-                      <XCircle size={16} /> NEGATIVE IMPACT
+                      <XCircle size={16} /> {t('impact.negativeImpact')}
                     </div>
                     <p className={styles.impactText}>{evidence.exposeText}</p>
                   </div>
@@ -344,6 +349,8 @@ EvidenceDetail.displayName = 'EvidenceDetail';
 
 // ============ Main Component ============
 const EvidenceVault: React.FC = () => {
+  const { t } = useTranslation('evidenceVault');
+
   // --- State ---
   const [files, setFiles] = useState<EvidenceFile[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<EvidenceCategory | 'all'>('all');
@@ -504,7 +511,7 @@ const EvidenceVault: React.FC = () => {
       <div className={styles.vault} ref={containerRef}>
         <div className={styles.errorState}>
           <AlertTriangle size={48} style={{ opacity: 0.3 }} />
-          <div className={styles.errorTitle}>SYSTEM ERROR</div>
+          <div className={styles.errorTitle}>{t('states.systemError')}</div>
           <p className={styles.errorText}>{error}</p>
         </div>
       </div>
@@ -527,8 +534,8 @@ const EvidenceVault: React.FC = () => {
       {!isCompact && (
         <div className={styles.sidebar}>
           <div className={styles.sidebarHeader}>
-            <div className={styles.sidebarTitle}>ARCHIVES</div>
-            <div className={styles.sidebarSubtitle}>CLASSIFIED DATA VAULT</div>
+            <div className={styles.sidebarTitle}>{t('sidebar.archives')}</div>
+            <div className={styles.sidebarSubtitle}>{t('sidebar.classifiedDataVault')}</div>
           </div>
 
           <div className={styles.sidebarNav}>
@@ -537,7 +544,7 @@ const EvidenceVault: React.FC = () => {
               onClick={() => handleCategoryChange('all')}
             >
               <Grid size={18} />
-              <span>All Files</span>
+              <span>{t('sidebar.allFiles')}</span>
               <span className={styles.navCount}>{categoryStats.all}</span>
             </div>
 
@@ -562,10 +569,10 @@ const EvidenceVault: React.FC = () => {
           </div>
 
           <div className={styles.sidebarFooter}>
-            <div className={styles.statusLabel}>System Status</div>
+            <div className={styles.statusLabel}>{t('sidebar.systemStatus')}</div>
             <div className={styles.statusRow}>
               <div className={styles.statusDot} />
-              <div className={styles.statusText}>ONLINE</div>
+              <div className={styles.statusText}>{t('sidebar.online')}</div>
             </div>
           </div>
         </div>
@@ -578,7 +585,9 @@ const EvidenceVault: React.FC = () => {
           <div className={styles.headerTitle}>
             {isCompact && <Archive size={18} style={{ opacity: 0.5, marginRight: 8 }} />}
             <div className={styles.headerDecoration} />
-            {selectedCategory === 'all' ? 'All Files' : CATEGORY_INFO[selectedCategory].name}
+            {selectedCategory === 'all'
+              ? t('header.allCategory')
+              : CATEGORY_INFO[selectedCategory].name}
           </div>
 
           <div className={styles.headerActions}>
@@ -588,7 +597,9 @@ const EvidenceVault: React.FC = () => {
                 value={selectedCategory}
                 onChange={(e) => handleCategoryChange(e.target.value as EvidenceCategory | 'all')}
               >
-                <option value="all">All ({categoryStats.all})</option>
+                <option value="all">
+                  {t('states.compactAllOption')} ({categoryStats.all})
+                </option>
                 {(Object.keys(CATEGORY_INFO) as EvidenceCategory[]).map((cat) => (
                   <option key={cat} value={cat}>
                     {CATEGORY_INFO[cat].name} ({categoryStats[cat] || 0})
@@ -601,7 +612,7 @@ const EvidenceVault: React.FC = () => {
               <Search size={16} />
               <input
                 type="text"
-                placeholder="Search evidence..."
+                placeholder={t('header.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -614,7 +625,7 @@ const EvidenceVault: React.FC = () => {
           {filteredFiles.length === 0 ? (
             <div className={styles.emptyState}>
               <Folder size={64} style={{ opacity: 0.15 }} />
-              <div className={styles.emptyText}>NO DATA FOUND</div>
+              <div className={styles.emptyText}>{t('states.noDataFound')}</div>
             </div>
           ) : (
             <div className={styles.grid}>

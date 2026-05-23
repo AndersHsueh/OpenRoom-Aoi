@@ -1,0 +1,66 @@
+const en = {
+  types: {
+    video: 'VIDEO ARCHIVE',
+    log: 'SYSTEM LOG',
+    transaction: 'FINANCIAL RECORD',
+    document: 'CLASSIFIED DOCUMENT',
+    image: 'IMAGE FILE',
+    audio: 'AUDIO RECORDING',
+    chat: 'CHAT RECORD',
+    email: 'EMAIL',
+    contract: 'CONTRACT',
+    report: 'INVESTIGATION REPORT',
+    trace: 'LEAD TRACKING',
+    relation: 'RELATIONSHIP MAP',
+  },
+  categories: {
+    identity: 'Identity',
+    family: 'Family Files',
+    money: 'Financial Data',
+    reputation: 'Reputation',
+    incident: 'Incidents',
+    secret: 'Classified',
+    other: 'Other',
+  },
+  impact: {
+    vindicate: 'POSITIVE',
+    expose: 'NEGATIVE',
+    neutral: 'NEUTRAL',
+    mixed: 'COMPLEX',
+    positiveImpact: 'POSITIVE IMPACT',
+    negativeImpact: 'NEGATIVE IMPACT',
+  },
+  importance: {
+    critical: 'CRITICAL',
+    high: 'HIGH',
+    normal: 'NORMAL',
+  },
+  sidebar: {
+    archives: 'ARCHIVES',
+    classifiedDataVault: 'CLASSIFIED DATA VAULT',
+    allFiles: 'All Files',
+    systemStatus: 'System Status',
+    online: 'ONLINE',
+  },
+  header: {
+    searchPlaceholder: 'Search evidence...',
+    allCategory: 'All Files',
+  },
+  detail: {
+    back: 'Back',
+    date: 'DATE',
+    source: 'SOURCE',
+    credibility: 'CREDIBILITY',
+    importance: 'IMPORTANCE',
+    description: 'DESCRIPTION',
+    evidenceContent: 'EVIDENCE CONTENT',
+  },
+  states: {
+    noDataFound: 'NO DATA FOUND',
+    systemError: 'SYSTEM ERROR',
+    initializing: 'INITIALIZING TERMINAL...',
+    compactAllOption: 'All',
+  },
+};
+
+export default en;

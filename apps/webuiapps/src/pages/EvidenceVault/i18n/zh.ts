@@ -1,0 +1,66 @@
+const zh = {
+  types: {
+    video: '视频档案',
+    log: '系统日志',
+    transaction: '财务记录',
+    document: '机密文档',
+    image: '图片文件',
+    audio: '音频记录',
+    chat: '聊天记录',
+    email: '电子邮件',
+    contract: '合同',
+    report: '调查报告',
+    trace: '线索追踪',
+    relation: '关系图谱',
+  },
+  categories: {
+    identity: '身份信息',
+    family: '家庭档案',
+    money: '财务数据',
+    reputation: '声誉',
+    incident: '事件',
+    secret: '机密',
+    other: '其他',
+  },
+  impact: {
+    vindicate: 'Positive',
+    expose: 'Negative',
+    neutral: 'Neutral',
+    mixed: 'Complex',
+    positiveImpact: 'Positive',
+    negativeImpact: 'Negative',
+  },
+  importance: {
+    critical: '紧急',
+    high: '高',
+    normal: '普通',
+  },
+  sidebar: {
+    archives: 'Archives',
+    classifiedDataVault: '机密资料库',
+    allFiles: 'All Files',
+    systemStatus: '系统状态',
+    online: 'Online',
+  },
+  header: {
+    searchPlaceholder: '搜索证据...',
+    allCategory: '全部',
+  },
+  detail: {
+    back: '返回',
+    date: '日期',
+    source: '来源',
+    credibility: '可信度',
+    importance: '重要性',
+    description: '描述',
+    evidenceContent: '证据内容',
+  },
+  states: {
+    noDataFound: '无数据',
+    systemError: '系统错误',
+    initializing: '终端初始化中...',
+    compactAllOption: '全部',
+  },
+};
+
+export default zh;
