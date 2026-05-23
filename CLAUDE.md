@@ -294,3 +294,25 @@ Minimum expectation: no task is "done" if unit tests are red, coverage on change
 | `/api/characters` | Character config |
 | `/api/mods` | Mod config |
 | `/api/log` | Debug logging |
+
+## Changelog
+
+### 2026-05-24 — i18n + Shell UI 改造 (fork-main, v0.0.1 → v0.0.2)
+
+**i18n 全局组件翻译** (`fb4cb59`)
+- 为 Shell、ChatPanel、SettingsModal、CharacterPanel、CharacterEditor、ModPanel、ModEditor 添加 `useTranslation()` 并替换全部硬编码英文字符串
+- 全局 locale 文件（en/zh/pt/es/ja）新增 `shell.*`、`chat.*`、`char.*`、`mod.*`、`upload.*` 共 ~40 个键
+- 关键决策：Shell/ChatPanel 使用默认命名空间（无参数 `useTranslation()`），与 `src/pages/` 下各 App 的独立命名空间模式区分
+
+**Shell UI 重构** (`fd11290`)
+- 新增 **Top Bar**：固定 40px，Logo + Invite/Mod/Gallery/Create/Restart/Feedback 6 个按钮
+- 替换浮动 `bottomBar` 为全宽 **TaskBar**：左侧 4 个控制按钮，右侧状态文字 + 实时时钟
+- 新增 **Desktop Clock Widget**：桌面右下角大字时钟 + 日期，Chat 开启时向左偏移
+- Desktop 布局调整：`top: 40px`，`height: calc(100vh - 76px)` 为两栏留出空间
+- TopBar 按钮通过 CustomEvent 跨组件通信：`open-mod-panel` → ChatPanel 打开 ModPanel；`reset-session` → ChatPanel 执行会话重置
+
+**本次修复的 Bug**
+- `openWindow('album')` 传字符串 → 修正为数值 `openWindow(8)`
+- `reset-session` useEffect 插入位置在 `handleResetSession` 声明之前（TDZ 错误）→ 移至声明后并改用 stable ref 模式（避免 `modCollection` 变更时反复重订阅）
+- ChatPanel `.panel` 原 `top:0; height:100vh`，被 TopBar 遮挡拦截点击 → 改为 `top:40px; height:calc(100vh-76px)`
+- 聊天输入框 `textarea` 出现滚动条 → 添加 `overflow:hidden`
