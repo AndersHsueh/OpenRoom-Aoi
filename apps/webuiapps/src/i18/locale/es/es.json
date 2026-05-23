@@ -1,4 +1,61 @@
 {
   "home": "Inicio",
-  "changeLang": "Cambiar idioma"
+  "changeLang": "Cambiar idioma",
+  "shell": {
+    "liveWallpaperOn": "Live wallpaper: ON",
+    "liveWallpaperOff": "Live wallpaper: OFF",
+    "toggleChat": "Toggle Chat",
+    "uploadFiles": "Upload files",
+    "reportOn": "User action reporting: ON",
+    "reportOff": "User action reporting: OFF"
+  },
+  "chat": {
+    "resetSession": "Reset session",
+    "clearChat": "Clear chat",
+    "settings": "Settings",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "typePlaceholder": "Type a message...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "settingsTitle": "LLM Settings",
+    "provider": "Provider",
+    "apiKey": "API Key",
+    "baseUrl": "Base URL",
+    "model": "Model",
+    "customHeaders": "Custom Headers",
+    "imageGenSettings": "Image Generation Settings",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "char": {
+    "name": "Name",
+    "gender": "Gender",
+    "persona": "Persona Description",
+    "avatarUrl": "Default Avatar URL",
+    "emotions": "Emotions",
+    "addEmotion": "Add Emotion",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "newCharacter": "New Character"
+  },
+  "mod": {
+    "title": "Agent Mod",
+    "subtitle": "Explore mods...",
+    "community": "Mod community",
+    "myMod": "My mod",
+    "newMod": "New Mod",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saveAndReset": "Save & Reset"
+  },
+  "upload": {
+    "title": "Upload Character Card",
+    "hint": "Drop PNG or ZIP here, or click to select",
+    "parsing": "Parsing...",
+    "generatingMod": "Generating mod..."
+  }
 }

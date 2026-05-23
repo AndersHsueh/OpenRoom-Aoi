@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Plus, Trash2, Check } from 'lucide-react';
 import {
   type CharacterConfig,
@@ -16,6 +17,7 @@ interface CharacterPanelProps {
 }
 
 const CharacterPanel: React.FC<CharacterPanelProps> = ({ collection, onSave, onClose }) => {
+  const { t } = useTranslation();
   const [col, setCol] = useState<CharacterCollection>(() => ({ ...collection }));
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -110,9 +112,9 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({ collection, onSave, onC
                       e.stopPropagation();
                       setEditingId(char.id);
                     }}
-                    title="Edit"
+                    title={t('char.edit')}
                   >
-                    Edit
+                    {t('char.edit')}
                   </button>
                   {characters.length > 1 && (
                     <button
@@ -134,14 +136,14 @@ const CharacterPanel: React.FC<CharacterPanelProps> = ({ collection, onSave, onC
 
         <div className={styles.panelFooter}>
           <button className={styles.addBtn} onClick={handleAdd}>
-            <Plus size={14} /> New Character
+            <Plus size={14} /> {t('char.newCharacter')}
           </button>
           <div style={{ flex: 1 }} />
           <button className={styles.cancelBtn} onClick={onClose}>
-            Cancel
+            {t('char.cancel')}
           </button>
           <button className={styles.saveBtn} onClick={handleSave}>
-            Save
+            {t('char.save')}
           </button>
         </div>
       </div>
@@ -158,6 +160,7 @@ const CharacterEditor: React.FC<{
   onSave: (config: CharacterConfig) => void;
   onClose: () => void;
 }> = ({ character, onSave, onClose }) => {
+  const { t } = useTranslation();
   const [name, setName] = useState(character.character_name);
   const [gender, setGender] = useState(character.character_gender_desc);
   const [desc, setDesc] = useState(character.character_desc);
@@ -251,7 +254,7 @@ const CharacterEditor: React.FC<{
           )}
 
           <div className={styles.field}>
-            <label className={styles.label}>Name</label>
+            <label className={styles.label}>{t('char.name')}</label>
             <input
               className={styles.input}
               value={name}
@@ -261,7 +264,7 @@ const CharacterEditor: React.FC<{
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Gender</label>
+            <label className={styles.label}>{t('char.gender')}</label>
             <input
               className={styles.input}
               value={gender}
@@ -271,7 +274,7 @@ const CharacterEditor: React.FC<{
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Persona Description</label>
+            <label className={styles.label}>{t('char.persona')}</label>
             <textarea
               className={styles.textarea}
               value={desc}
@@ -282,7 +285,7 @@ const CharacterEditor: React.FC<{
           </div>
 
           <div className={styles.field}>
-            <label className={styles.label}>Default Avatar (base image)</label>
+            <label className={styles.label}>{t('char.avatarUrl')}</label>
             <input
               className={styles.input}
               value={imageUrl}
@@ -293,7 +296,7 @@ const CharacterEditor: React.FC<{
 
           <div className={styles.field}>
             <label className={styles.label}>
-              Emotions & Expressions
+              {t('char.emotions')}
               <button className={styles.resetLink} onClick={handleResetEmotions}>
                 Reset to defaults
               </button>

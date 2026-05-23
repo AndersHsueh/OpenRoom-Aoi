@@ -1,4 +1,61 @@
 {
   "home": "首页",
-  "changeLang": "切换语言"
+  "changeLang": "切换语言",
+  "shell": {
+    "liveWallpaperOn": "动态壁纸：开",
+    "liveWallpaperOff": "动态壁纸：关",
+    "toggleChat": "切换聊天",
+    "uploadFiles": "上传文件",
+    "reportOn": "用户行为上报：开",
+    "reportOff": "用户行为上报：关"
+  },
+  "chat": {
+    "resetSession": "重置会话",
+    "clearChat": "清除聊天",
+    "settings": "设置",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "typePlaceholder": "输入消息...",
+    "send": "发送",
+    "thinking": "思考中...",
+    "settingsTitle": "LLM 设置",
+    "provider": "提供商",
+    "apiKey": "API 密钥",
+    "baseUrl": "接口地址",
+    "model": "模型",
+    "customHeaders": "自定义请求头",
+    "imageGenSettings": "图像生成设置",
+    "save": "保存",
+    "cancel": "取消"
+  },
+  "char": {
+    "name": "名称",
+    "gender": "性别",
+    "persona": "角色描述",
+    "avatarUrl": "默认头像 URL",
+    "emotions": "情感表情",
+    "addEmotion": "添加情感",
+    "delete": "删除",
+    "edit": "编辑",
+    "save": "保存",
+    "cancel": "取消",
+    "newCharacter": "新建角色"
+  },
+  "mod": {
+    "title": "Agent 模组",
+    "subtitle": "探索模组...",
+    "community": "模组社区",
+    "myMod": "我的模组",
+    "newMod": "新建模组",
+    "edit": "编辑",
+    "save": "保存",
+    "cancel": "取消",
+    "saveAndReset": "保存并重置"
+  },
+  "upload": {
+    "title": "上传角色卡",
+    "hint": "拖拽 PNG 或 ZIP 到此处，或点击选择",
+    "parsing": "解析中...",
+    "generatingMod": "生成模组中..."
+  }
 }

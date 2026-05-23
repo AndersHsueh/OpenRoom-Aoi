@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X, Plus, Trash2, RotateCcw, Check } from 'lucide-react';
 import {
   type ModConfig,
@@ -20,6 +21,7 @@ interface ModPanelProps {
 }
 
 const ModPanel: React.FC<ModPanelProps> = ({ collection, onSave, onClose, initialEditId }) => {
+  const { t } = useTranslation();
   const [col, setCol] = useState<ModCollection>(() => ({ ...collection }));
   const [editingId, setEditingId] = useState<string | null>(initialEditId ?? null);
 
@@ -143,9 +145,9 @@ const ModPanel: React.FC<ModPanelProps> = ({ collection, onSave, onClose, initia
                         e.stopPropagation();
                         setEditingId(cfg.id);
                       }}
-                      title="Edit"
+                      title={t('mod.edit')}
                     >
-                      Edit
+                      {t('mod.edit')}
                     </button>
                     {mods.length > 1 && (
                       <button
@@ -168,14 +170,14 @@ const ModPanel: React.FC<ModPanelProps> = ({ collection, onSave, onClose, initia
 
         <div className={styles.panelFooter}>
           <button className={styles.addBtn} onClick={handleAdd}>
-            <Plus size={14} /> New Mod
+            <Plus size={14} /> {t('mod.newMod')}
           </button>
           <div style={{ flex: 1 }} />
           <button className={styles.cancelBtn} onClick={onClose}>
-            Cancel
+            {t('mod.cancel')}
           </button>
           <button className={styles.saveBtn} onClick={handleSave}>
-            Save
+            {t('mod.save')}
           </button>
         </div>
       </div>
@@ -243,6 +245,7 @@ const ModEditor: React.FC<{
   onSave: (entry: ModEntry) => void;
   onClose: () => void;
 }> = ({ entry, onSave, onClose }) => {
+  const { t } = useTranslation();
   const config = entry.config;
   const state = entry.state;
 
@@ -363,7 +366,7 @@ const ModEditor: React.FC<{
           {activeTab === 'edit' && (
             <button className={styles.resetBtn} onClick={handleSaveAndReset}>
               <RotateCcw size={14} />
-              Save & Reset
+              {t('mod.saveAndReset')}
             </button>
           )}
           <button className={styles.saveBtn} onClick={handleSave}>

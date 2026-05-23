@@ -103,3 +103,6 @@ nohup.out
 # Docs (local planning & notes)
 docs/
 .worktrees/
+
+# Local character resources (images, videos)
+2nd-resource/

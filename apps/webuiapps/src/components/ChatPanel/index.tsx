@@ -83,6 +83,7 @@ import {
 } from '@/lib/modManager';
 import CharacterPanel from './CharacterPanel';
 import ModPanel from './ModPanel';
+import { useTranslation } from 'react-i18next';
 import styles from './index.module.scss';
 
 // ---------------------------------------------------------------------------
@@ -389,6 +390,7 @@ const ChatPanel: React.FC<{
   zIndex?: number;
   onFocus?: () => void;
 }> = ({ onClose, visible = true, zIndex, onFocus }) => {
+  const { t } = useTranslation();
   // Character + Mod state (collection-based)
   const [charCollection, setCharCollection] = useState<CharacterCollection>(
     () => loadCharacterCollectionSync() ?? DEFAULT_CHAR_COLLECTION,
@@ -1073,7 +1075,7 @@ const ChatPanel: React.FC<{
               <button
                 className={styles.iconBtn}
                 onClick={handleResetSession}
-                title="Reset session"
+                title={t('chat.resetSession')}
                 data-testid="reset-session"
               >
                 <RotateCcw size={16} />
@@ -1081,7 +1083,7 @@ const ChatPanel: React.FC<{
               <button
                 className={styles.iconBtn}
                 onClick={handleClearHistory}
-                title="Clear chat"
+                title={t('chat.clearChat')}
                 data-testid="clear-chat"
               >
                 <Trash2 size={16} />
@@ -1089,15 +1091,15 @@ const ChatPanel: React.FC<{
               <button
                 className={styles.iconBtn}
                 onClick={() => setShowSettings(true)}
-                title="Settings"
+                title={t('chat.settings')}
                 data-testid="settings-btn"
               >
                 <Settings size={16} />
               </button>
-              <button className={styles.iconBtn} onClick={onClose} title="Minimize">
+              <button className={styles.iconBtn} onClick={onClose} title={t('chat.minimize')}>
                 <Minus size={16} />
               </button>
-              <button className={styles.iconBtn} title="Maximize">
+              <button className={styles.iconBtn} title={t('chat.maximize')}>
                 <Maximize2 size={16} />
               </button>
             </div>
@@ -1133,7 +1135,7 @@ const ChatPanel: React.FC<{
                 )}
               </React.Fragment>
             ))}
-            {loading && <div className={styles.loading}>Thinking...</div>}
+            {loading && <div className={styles.loading}>{t('chat.thinking')}</div>}
             <div ref={messagesEndRef} />
           </div>
 
@@ -1154,7 +1156,7 @@ const ChatPanel: React.FC<{
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
+              placeholder={t('chat.typePlaceholder')}
               rows={1}
               disabled={loading}
               data-testid="chat-input"
@@ -1165,7 +1167,7 @@ const ChatPanel: React.FC<{
               disabled={loading || !input.trim()}
               data-testid="send-btn"
             >
-              Send
+              {t('chat.send')}
             </button>
           </div>
         </div>
@@ -1230,6 +1232,7 @@ const SettingsModal: React.FC<{
   onSave: (_config: LLMConfig, _igConfig: ImageGenConfig | null) => void;
   onClose: () => void;
 }> = ({ config, imageGenConfig, onSave, onClose }) => {
+  const { t } = useTranslation();
   // LLM settings
   const [provider, setProvider] = useState<LLMProvider>(config?.provider || 'minimax');
   const [apiKey, setApiKey] = useState(config?.apiKey || '');
@@ -1279,10 +1282,10 @@ const SettingsModal: React.FC<{
   return (
     <div className={styles.overlay} data-testid="settings-overlay">
       <div className={styles.settingsModal} data-testid="settings-modal">
-        <div className={styles.settingsTitle}>LLM Settings</div>
+        <div className={styles.settingsTitle}>{t('chat.settingsTitle')}</div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Provider</label>
+          <label className={styles.label}>{t('chat.provider')}</label>
           <select
             className={styles.select}
             value={provider}
@@ -1300,7 +1303,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>API Key</label>
+          <label className={styles.label}>{t('chat.apiKey')}</label>
           <input
             className={styles.fieldInput}
             type="password"
@@ -1311,7 +1314,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Base URL</label>
+          <label className={styles.label}>{t('chat.baseUrl')}</label>
           <input
             className={styles.fieldInput}
             value={baseUrl}
@@ -1320,7 +1323,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Model</label>
+          <label className={styles.label}>{t('chat.model')}</label>
           <div className={styles.modelSelectorWrapper}>
             {showDropdown ? (
               <>
@@ -1368,7 +1371,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Custom Headers (one per line, Key: Value)</label>
+          <label className={styles.label}>{t('chat.customHeaders')}</label>
           <textarea
             className={styles.fieldInput}
             value={customHeaders}
@@ -1380,10 +1383,10 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.settingsDivider} />
-        <div className={styles.settingsTitle}>Image Generation</div>
+        <div className={styles.settingsTitle}>{t('chat.imageGenSettings')}</div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Provider</label>
+          <label className={styles.label}>{t('chat.provider')}</label>
           <select
             className={styles.select}
             value={igProvider}
@@ -1395,7 +1398,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>API Key</label>
+          <label className={styles.label}>{t('chat.apiKey')}</label>
           <input
             className={styles.fieldInput}
             type="password"
@@ -1406,7 +1409,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Base URL</label>
+          <label className={styles.label}>{t('chat.baseUrl')}</label>
           <input
             className={styles.fieldInput}
             value={igBaseUrl}
@@ -1415,7 +1418,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Model</label>
+          <label className={styles.label}>{t('chat.model')}</label>
           <input
             className={styles.fieldInput}
             value={igModel}
@@ -1424,7 +1427,7 @@ const SettingsModal: React.FC<{
         </div>
 
         <div className={styles.field}>
-          <label className={styles.label}>Custom Headers</label>
+          <label className={styles.label}>{t('chat.customHeaders')}</label>
           <textarea
             className={styles.fieldInput}
             value={igCustomHeaders}
@@ -1437,7 +1440,7 @@ const SettingsModal: React.FC<{
 
         <div className={styles.settingsActions}>
           <button className={styles.cancelBtn} onClick={onClose}>
-            Cancel
+            {t('chat.cancel')}
           </button>
           <button
             className={styles.saveBtn}
@@ -1461,7 +1464,7 @@ const SettingsModal: React.FC<{
               onSave(llmCfg, igCfg);
             }}
           >
-            Save
+            {t('chat.save')}
           </button>
         </div>
       </div>

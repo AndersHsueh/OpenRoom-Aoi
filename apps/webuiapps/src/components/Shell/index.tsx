@@ -40,6 +40,7 @@ import {
 } from '@/lib/modManager';
 import type { ModConfig } from '@/lib/modManager';
 import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { seedMetaFiles } from '@/lib/seedMeta';
 import { logger } from '@/lib/logger';
 import styles from './index.module.scss';
@@ -85,6 +86,7 @@ function isVideoUrl(url: string): boolean {
 }
 
 const Shell: React.FC = () => {
+  const { t } = useTranslation();
   const [chatOpen, setChatOpen] = useState(true);
   const [reportEnabled, setReportEnabled] = useState(true);
   const [lang, setLang] = useState<'en' | 'zh'>('en');
@@ -368,7 +370,7 @@ const Shell: React.FC = () => {
         <div className={styles.uploadOverlay} onClick={() => setUploadOpen(false)}>
           <div className={styles.uploadModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.uploadHeader}>
-              <span>Upload File</span>
+              <span>{t('upload.title')}</span>
               <button className={styles.uploadClose} onClick={() => setUploadOpen(false)}>
                 <X size={16} />
               </button>
@@ -392,7 +394,7 @@ const Shell: React.FC = () => {
             ) : (
               <div className={styles.uploadDropZone} onClick={() => fileInputRef.current?.click()}>
                 <Upload size={32} />
-                <p>Click to select a file</p>
+                <p>{t('upload.hint')}</p>
                 <p className={styles.uploadHint}>PNG image or ZIP archive</p>
               </div>
             )}
@@ -411,7 +413,7 @@ const Shell: React.FC = () => {
               disabled={!uploadedFile || extracting}
               onClick={handleUploadSubmit}
             >
-              {extracting ? 'Parsing...' : 'Confirm'}
+              {extracting ? t('upload.parsing') : 'Confirm'}
             </button>
           </div>
         </div>
@@ -422,7 +424,7 @@ const Shell: React.FC = () => {
         <div className={styles.uploadOverlay}>
           <div className={styles.analyzingCard}>
             <div className={styles.analyzingSpinner} />
-            <span>Generating mod...</span>
+            <span>{t('upload.generatingMod')}</span>
           </div>
         </div>
       )}
@@ -446,7 +448,7 @@ const Shell: React.FC = () => {
       <button
         className={`${styles.addBtn} ${chatOpen ? styles.chatOpen : ''}`}
         onClick={() => setUploadOpen(true)}
-        title="Upload files"
+        title={t('shell.uploadFiles')}
         data-testid="upload-toggle"
       >
         <Plus size={20} />
@@ -456,7 +458,7 @@ const Shell: React.FC = () => {
         <button
           className={`${styles.barBtn} ${liveWallpaper ? styles.liveOn : styles.liveOff}`}
           onClick={() => setLiveWallpaper((prev) => !prev)}
-          title={liveWallpaper ? 'Live wallpaper: ON' : 'Live wallpaper: OFF'}
+          title={liveWallpaper ? t('shell.liveWallpaperOn') : t('shell.liveWallpaperOff')}
           data-testid="wallpaper-toggle"
         >
           {liveWallpaper ? <Video size={16} /> : <VideoOff size={16} />}
@@ -474,7 +476,7 @@ const Shell: React.FC = () => {
         <button
           className={`${styles.barBtn} ${reportEnabled ? styles.reportOn : styles.reportOff}`}
           onClick={handleToggleReport}
-          title={reportEnabled ? 'User action reporting: ON' : 'User action reporting: OFF'}
+          title={reportEnabled ? t('shell.reportOn') : t('shell.reportOff')}
           data-testid="report-toggle"
         >
           <Radio size={16} />
@@ -483,7 +485,7 @@ const Shell: React.FC = () => {
         <button
           className={`${styles.barBtn} ${styles.chatBtn}`}
           onClick={() => setChatOpen(!chatOpen)}
-          title="Toggle Chat"
+          title={t('shell.toggleChat')}
           data-testid="chat-toggle"
         >
           <MessageCircle size={18} />
