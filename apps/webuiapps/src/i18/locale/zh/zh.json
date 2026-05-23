@@ -57,5 +57,17 @@
     "hint": "拖拽 PNG 或 ZIP 到此处，或点击选择",
     "parsing": "解析中...",
     "generatingMod": "生成模组中..."
+  },
+  "topBar": {
+    "invite": "邀请",
+    "mod": "模组",
+    "gallery": "画廊",
+    "create": "创建",
+    "restart": "重启",
+    "feedback": "反馈"
+  },
+  "taskBar": {
+    "status": "就绪",
+    "statusActive": "Agent 活跃"
   }
 }

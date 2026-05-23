@@ -14,11 +14,15 @@ import {
   Radio,
   Video,
   VideoOff,
-  Plus,
   X,
   Upload,
   FileImage,
   FileArchive,
+  Users,
+  Package,
+  PlusCircle,
+  RotateCcw,
+  MessageSquare,
   type LucideIcon,
 } from 'lucide-react';
 import ChatPanel from '../ChatPanel';
@@ -76,6 +80,8 @@ const VIDEO_WALLPAPER =
 const STATIC_WALLPAPER =
   'https://cdn.openroom.ai/public-cdn-s3-us-west-2/talkie-op-img/image/437110625_1772619481913_Aoi_default_Commander_Room.jpg';
 
+const FEEDBACK_URL = 'https://github.com/AndersHsueh/OpenRoom-Aoi/issues';
+
 function isVideoUrl(url: string): boolean {
   try {
     const pathname = new URL(url).pathname.toLowerCase();
@@ -92,10 +98,13 @@ const Shell: React.FC = () => {
   const [lang, setLang] = useState<'en' | 'zh'>('en');
   const [liveWallpaper, setLiveWallpaper] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [extractResult, setExtractResult] = useState<ExtractResult | null>(null);
   const [extracting, setExtracting] = useState(false);
   const [modGenerating, setModGenerating] = useState(false);
+  const [clockTime, setClockTime] = useState('');
+  const [clockDate, setClockDate] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,7 +175,7 @@ const Shell: React.FC = () => {
                   stage_name: s.name || `Stage ${i + 1}`,
                   stage_description: s.description || '',
                   stage_targets: Object.fromEntries(
-                    (s.targets || []).map((t) => [t.id, t.description]),
+                    (s.targets || []).map((tgt) => [tgt.id, tgt.description]),
                   ),
                 },
               ]),
@@ -213,6 +222,7 @@ const Shell: React.FC = () => {
       setExtracting(false);
     }
   }, [uploadedFile, generateMod]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [wallpaper, setWallpaper] = useState(VIDEO_WALLPAPER);
   const [chatZIndex, setChatZIndex] = useState(() => claimZIndex());
@@ -282,8 +292,28 @@ const Shell: React.FC = () => {
     });
   }, []);
 
+  const handleRestartSession = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('reset-session'));
+  }, []);
+
   useEffect(() => {
     seedMetaFiles();
+  }, []);
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setClockTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      const nextDate = now.toLocaleDateString([], {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+      setClockDate((prev) => (prev === nextDate ? prev : nextDate));
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
   }, []);
 
   // Pause user action reporting while upload or mod generation is in progress
@@ -312,6 +342,45 @@ const Shell: React.FC = () => {
         backgroundPosition: 'center',
       }}
     >
+      {/* Top Bar */}
+      <div className={styles.topBar}>
+        <div className={styles.topBarLeft}>
+          <span className={styles.logo}>OpenRoom</span>
+        </div>
+        <div className={styles.topBarCenter}>
+          <button className={styles.topBarBtn} onClick={() => setInviteOpen(true)}>
+            <Users size={14} /> {t('topBar.invite')}
+          </button>
+          <button
+            className={styles.topBarBtn}
+            onClick={() => window.dispatchEvent(new CustomEvent('open-mod-panel'))}
+          >
+            <Package size={14} /> {t('topBar.mod')}
+          </button>
+          <button className={styles.topBarBtn} onClick={() => openWindow(8)}>
+            <Image size={14} /> {t('topBar.gallery')}
+          </button>
+          <button
+            className={styles.topBarBtn}
+            onClick={() => setUploadOpen(true)}
+            data-testid="upload-toggle"
+          >
+            <PlusCircle size={14} /> {t('topBar.create')}
+          </button>
+        </div>
+        <div className={styles.topBarRight}>
+          <button className={styles.topBarBtn} onClick={handleRestartSession}>
+            <RotateCcw size={14} /> {t('topBar.restart')}
+          </button>
+          <button
+            className={styles.topBarBtn}
+            onClick={() => window.open(FEEDBACK_URL, '_blank', 'noopener,noreferrer')}
+          >
+            <MessageSquare size={14} /> {t('topBar.feedback')}
+          </button>
+        </div>
+      </div>
+
       {showVideo && pipPos && (
         <div
           ref={pipRef}
@@ -326,6 +395,7 @@ const Shell: React.FC = () => {
           </button>
         </div>
       )}
+
       {/* Desktop with app icons */}
       <div className={styles.desktop} data-testid="desktop">
         <div className={styles.iconGrid}>
@@ -349,6 +419,10 @@ const Shell: React.FC = () => {
               <span className={styles.iconLabel}>{app.displayName}</span>
             </button>
           ))}
+        </div>
+        <div className={`${styles.clockWidget} ${chatOpen ? styles.chatOpen : ''}`}>
+          <div className={styles.clockTime}>{clockTime}</div>
+          <div className={styles.clockDate}>{clockDate}</div>
         </div>
       </div>
 
@@ -419,6 +493,27 @@ const Shell: React.FC = () => {
         </div>
       )}
 
+      {/* Invite placeholder dialog */}
+      {inviteOpen && (
+        <div className={styles.uploadOverlay} onClick={() => setInviteOpen(false)}>
+          <div className={styles.uploadModal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.uploadHeader}>
+              <span>{t('topBar.invite')}</span>
+              <button className={styles.uploadClose} onClick={() => setInviteOpen(false)}>
+                <X size={16} />
+              </button>
+            </div>
+            <p className={styles.inviteMsg}>Share link feature coming soon</p>
+            <button
+              className={`${styles.uploadSubmitBtn} ${styles.active}`}
+              onClick={() => setInviteOpen(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Mod generating overlay */}
       {modGenerating && (
         <div className={styles.uploadOverlay}>
@@ -444,52 +539,51 @@ const Shell: React.FC = () => {
         </div>
       )}
 
-      {/* Floating add button */}
-      <button
-        className={`${styles.addBtn} ${chatOpen ? styles.chatOpen : ''}`}
-        onClick={() => setUploadOpen(true)}
-        title={t('shell.uploadFiles')}
-        data-testid="upload-toggle"
-      >
-        <Plus size={20} />
-      </button>
+      {/* Task Bar */}
+      <div ref={barRef} className={`${styles.taskBar} ${chatOpen ? styles.chatOpen : ''}`}>
+        <div className={styles.taskBarLeft}>
+          <button
+            className={`${styles.barBtn} ${liveWallpaper ? styles.liveOn : styles.liveOff}`}
+            onClick={() => setLiveWallpaper((prev) => !prev)}
+            title={liveWallpaper ? t('shell.liveWallpaperOn') : t('shell.liveWallpaperOff')}
+            data-testid="wallpaper-toggle"
+          >
+            {liveWallpaper ? <Video size={16} /> : <VideoOff size={16} />}
+          </button>
 
-      <div className={`${styles.bottomBar} ${chatOpen ? styles.chatOpen : ''}`}>
-        <button
-          className={`${styles.barBtn} ${liveWallpaper ? styles.liveOn : styles.liveOff}`}
-          onClick={() => setLiveWallpaper((prev) => !prev)}
-          title={liveWallpaper ? t('shell.liveWallpaperOn') : t('shell.liveWallpaperOff')}
-          data-testid="wallpaper-toggle"
-        >
-          {liveWallpaper ? <Video size={16} /> : <VideoOff size={16} />}
-        </button>
+          <button
+            className={`${styles.barBtn} ${styles.langBtn}`}
+            onClick={handleToggleLang}
+            title={lang === 'en' ? 'Switch to Chinese' : 'Switch to English'}
+            data-testid="lang-toggle"
+          >
+            {lang === 'en' ? 'EN' : 'ZH'}
+          </button>
 
-        <button
-          className={`${styles.barBtn} ${styles.langBtn}`}
-          onClick={handleToggleLang}
-          title={lang === 'en' ? 'Switch to Chinese' : 'Switch to English'}
-          data-testid="lang-toggle"
-        >
-          {lang === 'en' ? 'EN' : 'ZH'}
-        </button>
+          <button
+            className={`${styles.barBtn} ${reportEnabled ? styles.reportOn : styles.reportOff}`}
+            onClick={handleToggleReport}
+            title={reportEnabled ? t('shell.reportOn') : t('shell.reportOff')}
+            data-testid="report-toggle"
+          >
+            <Radio size={16} />
+          </button>
 
-        <button
-          className={`${styles.barBtn} ${reportEnabled ? styles.reportOn : styles.reportOff}`}
-          onClick={handleToggleReport}
-          title={reportEnabled ? t('shell.reportOn') : t('shell.reportOff')}
-          data-testid="report-toggle"
-        >
-          <Radio size={16} />
-        </button>
-
-        <button
-          className={`${styles.barBtn} ${styles.chatBtn}`}
-          onClick={() => setChatOpen(!chatOpen)}
-          title={t('shell.toggleChat')}
-          data-testid="chat-toggle"
-        >
-          <MessageCircle size={18} />
-        </button>
+          <button
+            className={`${styles.barBtn} ${styles.chatBtn}`}
+            onClick={() => setChatOpen(!chatOpen)}
+            title={t('shell.toggleChat')}
+            data-testid="chat-toggle"
+          >
+            <MessageCircle size={18} />
+          </button>
+        </div>
+        <div className={styles.taskBarRight}>
+          <span className={styles.taskBarStatus}>
+            {reportEnabled ? t('taskBar.statusActive') : t('taskBar.status')}
+          </span>
+          <span className={styles.taskBarClock}>{clockTime}</span>
+        </div>
       </div>
     </div>
   );

@@ -57,5 +57,17 @@
     "hint": "Drop PNG or ZIP here, or click to select",
     "parsing": "Parsing...",
     "generatingMod": "Generating mod..."
+  },
+  "topBar": {
+    "invite": "Invite",
+    "mod": "Mod",
+    "gallery": "Gallery",
+    "create": "Create",
+    "restart": "Restart",
+    "feedback": "Feedback"
+  },
+  "taskBar": {
+    "status": "Ready",
+    "statusActive": "Agent active"
   }
 }

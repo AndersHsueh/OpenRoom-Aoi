@@ -447,6 +447,12 @@ const ChatPanel: React.FC<{
     return () => window.removeEventListener('open-mod-editor', handler);
   }, []);
 
+  useEffect(() => {
+    const handler = () => setShowModPanel(true);
+    window.addEventListener('open-mod-panel', handler);
+    return () => window.removeEventListener('open-mod-panel', handler);
+  }, []);
+
   // Memories loaded for SP injection
   const [memories, setMemories] = useState<MemoryEntry[]>([]);
 
@@ -624,6 +630,14 @@ const ChatPanel: React.FC<{
     // Re-seed meta files
     await seedMetaFiles();
   }, [modCollection, seedPrologue]);
+
+  const handleResetSessionRef = useRef(handleResetSession);
+  handleResetSessionRef.current = handleResetSession;
+  useEffect(() => {
+    const handler = () => handleResetSessionRef.current();
+    window.addEventListener('reset-session', handler);
+    return () => window.removeEventListener('reset-session', handler);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
